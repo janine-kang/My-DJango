@@ -34,7 +34,45 @@
   - DB안에서 수많은 데이터들이 마구잡이로 떠다니지 않고 이쁘게 라벨링되어서 정리되어있도록 `models.py`에서 정의한 뼈대를 DB에 넣어주는 것
   - 장고의 기본 데이터베이스는 SQLite
 
+3) `urlconf`
 
+- url=좌표. 모든 페이지는 고유한 url을 부여받음. 
+- `urlconf`: <u>url의 패턴을 설정</u>하여 일치하는 view를 찾기 위한 패턴들의 집합(`http:@@@.co.kr로 끝나는 url 찾아주세요)
+- path('admin/', admin.site.urls),
+  - admin/으로 시작하는 모든 URL을 view와 대조해 찾아내라
+  - 무수히 많은 url이 존재하여 일일히 나열할 수 없기 때문에 정규표현식을 사용
+- from django.urls import path, include
+  - `from %% import @@` =>%%에 있는 @@ 불러오기
+  - `app.urls`을 가져오기 위해서 `django.url` 모듈에 있는 `include`함수 사용. 
+  - `include()`: 다른 urlconf들을 참고하도록 도와줌. url중 일치하는 부분은 잘라내고, 남은 문자열 부분을 `include`된 URLconf로 전달
+
+- path('', views.post_list, name='post_list')
+  - `name='post_list'` => url의 별명. Jan이라고 불러요~ 같은거
+  - `''`: 연관된 주소 뭘 넣어도 바로 `views.post_list`를 보여줘
+  - `views.post_list => `views.`파일 안에 `post_list` 부분을 뿌려줘
+
+4) `views.py`
+
+- ```python
+  def post_list(request): 
+  	return render(request, 'blog/post_list.html')
+  ```
+
+  - -> 요청을 넘겨받아 render 메서드 호출->호출받은 템플릿을 보여줌
+
+- view는 templates과 forms에 연결되어있음
+
+
+
+5) `post_list.html`
+
+- templates
+
+
+
+6) QuerySet
+
+- 사이트에 작성한 글을 DB로 저장하기 위한 단계
 
 
 
@@ -42,11 +80,17 @@
 
 ## 2. 구현 순서
 
-| 단계 |                          실행 순서                           |
-| ---- | :----------------------------------------------------------: |
-| 기초 | edit `settings.py`->`migrate`->`runserver`->`createsuperuser`->`startapp`->add app in `settings.py` |
-| 모델 | `models.py`->`makemigrations`+`migrate`->`admin.py`=>글 포스트하기 |
-|      |                                                              |
+| 단계     |                          실행 순서                           |
+| -------- | :----------------------------------------------------------: |
+| 기초     | edit `settings.py`->`migrate`->`runserver`->`createsuperuser`->`startapp`->add app in `settings.py` |
+| 모델     | `models.py`->`makemigrations`+`migrate`->`admin.py`=>글 포스트하기 |
+| URL      | 최상위 `url.py`에  `include('app.url')` 경로 추가->`app/url.py`파일 생성->url패턴 추가 |
+| views    | `post_list` 정의해주기->`templates/app/ post_list.html` 생성 |
+| QuerySet |                          `DB 정리`                           |
+|          |                                                              |
+|          |                                                              |
+|          |                                                              |
+|          |                                                              |
 
 
 
@@ -72,3 +116,13 @@
 
 ->`migrate` 실행 후 글 등록까지 완료
 
+3) `urls.py`실행 에러
+
+- ModuleNotFoundError: No module named 'django.<u>url</u>'
+  - url->urls
+- TypeError: view must be a callable or a list/tuple ins the case of include().
+  - post_list.html 저장 안해서 뜬 오류
+  - HttpResponse 날렸는데도 안뜸
+    - HttpResponse 호출 들어간 객체(?) 정의가 post_list_test로 바뀌어서 그랬음!
+- django.template.exceptions.TemplateDoesNotExist: blog/post_list.html
+  - post_list.html없어서 뜬 오류
