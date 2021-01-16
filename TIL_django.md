@@ -72,9 +72,8 @@
 
 6) QuerySet
 
-- 사이트에 작성한 글을 DB로 저장하기 위한 단계
-
-
+- 전달받은 모델의 객체 목록(사용자가 작성한 DB말하는 듯)
+- DB로부터 데이터를 읽고 필터 혹은 정렬
 
 
 
@@ -86,7 +85,7 @@
 | 모델     | `models.py`->`makemigrations`+`migrate`->`admin.py`=>글 포스트하기 |
 | URL      | 최상위 `url.py`에  `include('app.url')` 경로 추가->`app/url.py`파일 생성->url패턴 추가 |
 | views    | `post_list` 정의해주기->`templates/app/ post_list.html` 생성 |
-| QuerySet |                          `DB 정리`                           |
+| QuerySet |                      `DB 정리 및 정렬`                       |
 |          |                                                              |
 |          |                                                              |
 |          |                                                              |
